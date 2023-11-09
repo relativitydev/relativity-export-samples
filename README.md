@@ -675,26 +675,26 @@ There are two types of sample application that demonstrate the use of Export Ser
 
 | Sample Name | .NET & Kepler | Powershell |
 | --- | --- | --- |
-| Export_FromFolder_NativeFiles | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromFolder_Images | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromFolder_PDF | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromFolder_FullText | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromFolder_All | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromSavedSearch_NativeFiles | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromSavedSearch_Images | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromSavedSearch_PDF | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromSavedSearch_FullText | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromSavedSearch_All | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromProduction_NativeFiles | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromProduction_Images | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromProduction_PDF | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromProduction_Fulltext | [Sample](https://link/) | [Sample](https://link/) |
-| Export_FromProduction_All | [Sample](https://link/) | [Sample](https://link/) |
-| Export_RDO | [Sample](https://link/) | [Sample](https://link/) |
-| Job_ListExportJobs | [Sample](https://link/) | [Sample](https://link/) |
-| Job_StartAllRunnableJobs | [Sample](https://link/) | [Sample](https://link/) |
-| Job_GetSettings | [Sample](https://link/) | [Sample](https://link/) |
-| Job_Cancel | [Sample](https://link/) | [Sample](https://link/) |
+| Export_FromFolder_NativeFiles | [Sample 1](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Folder_NativeFiles.cs) | [Sample](placeholder) |
+| Export_FromFolder_Images | [Sample 2](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Folder_Images.cs) | [Sample](placeholder) |
+| Export_FromFolder_PDF | [Sample 3](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Folder_PDF.cs) | [Sample](placeholder) |
+| Export_FromFolder_FullText | [Sample 4](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Folder_FullText.cs) | [Sample](placeholder) |
+| Export_FromFolder_All | [Sample 5](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Folder_All.cs) | [Sample](placeholder) |
+| Export_FromSavedSearch_NativeFiles | [Sample 6](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_SavedSearch_NativeFiles.cs) | [Sample](placeholder) |
+| Export_FromSavedSearch_Images | [Sample 7](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_SavedSearch_Images.cs) | [Sample](placeholder) |
+| Export_FromSavedSearch_PDF | [Sample 8](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_SavedSearch_PDF.cs) | [Sample]() |
+| Export_FromSavedSearch_FullText | [Sample 9](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_SavedSearch_FullText.cs) | [Sample](placeholder) |
+| Export_FromSavedSearch_All | [Sample 10](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_SavedSearch_All.cs) | [Sample](placeholder) |
+| Export_FromProduction_NativeFiles | [Sample 11](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Production_NativeFiles.cs) | [Sample](placeholder) |
+| Export_FromProduction_Images | [Sample 12](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Production_Images.cs) | [Sample](placeholder) |
+| Export_FromProduction_PDF | [Sample 13](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Production_PDF.cs) | [Sample](placeholder) |
+| Export_FromProduction_Fulltext | [Sample 14](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Production_FullText.cs) | [Sample](placeholder) |
+| Export_FromProduction_All | [Sample 15](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Production_All.cs) | [Sample](placeholder) |
+| Export_RDO | [Sample 16](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_RDO.cs) | [Sample](placeholder) |
+| Job_ListExportJobs | [Sample 17](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Job_List.cs) | [Sample](placeholder) |
+| Job_StartAllRunnableJobs | [Sample 18](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Job_StartAllRunnableJobs.cs) | [Sample](placeholder) |
+| Job_GetSettings | [Sample 19](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Job_GetSettings.cs) | [Sample](placeholder) |
+| Job_Cancel | [Sample 20](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Job_Cancel.cs) | [Sample](placeholder) |
 
 ## Kepler Samples
 To run the sample code:
