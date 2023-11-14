@@ -21,7 +21,7 @@ public partial class BaseExportService
 		string? applicationName = "Export-Service-Sample-App";
 		string? correlationID = $"Sample-Job-{nameof(Export_FromSavedSearch_FullText)}";
 
-		OutputHelper.PrintSampleData(new Dictionary<string, string>
+		_logger.PrintSampleData(new Dictionary<string, string>
 		{
 			{"Workspace ID", workspaceID.ToString() },
 			{"Saved Search ID", savedSearchID.ToString() },
@@ -117,10 +117,10 @@ public partial class BaseExportService
 		// Create proxy to use IExportJobManager
 		using Relativity.Export.V1.IExportJobManager jobManager = this._serviceFactory.CreateProxy<Relativity.Export.V1.IExportJobManager>();
 
-		OutputHelper.PrintJobJson(jobSettings);
+		_logger.PrintJobJson(jobSettings);
 
 		// Create export job
-		OutputHelper.PrintLog("Creating job");
+		_logger.LogInformation("Creating job");
 		var validationResult = await jobManager.CreateAsync(
 			workspaceID,
 			jobID,
@@ -128,36 +128,42 @@ public partial class BaseExportService
 			applicationName,
 			correlationID);
 
+		if (validationResult is null)
+		{
+			_logger.LogError("Something went wrong with fetching response");
+			return;
+		}
+
 		// check validation result
 		if (!validationResult.IsSuccess)
 		{
-			OutputHelper.PrintError($"<{validationResult.ErrorCode}> {validationResult.ErrorMessage}");
+			_logger.LogError($"<{validationResult.ErrorCode}> {validationResult.ErrorMessage}");
 
 			// iterate errors and print them
 			foreach (var validationError in validationResult.Value.ValidationErrors)
 			{
-				OutputHelper.PrintError($"{validationError.Key} - {validationError.Value}");
+				_logger.LogError($"{validationError.Key} - {validationError.Value}");
 			}
 
 			return;
 		}
 
-		OutputHelper.PrintLog("Job created successfully");
+		_logger.LogInformation("Job created successfully");
 
 		// Start export job
-		OutputHelper.PrintLog($"Stating job with <{jobID}> ID");
+		_logger.LogInformation($"Stating job with <{jobID}> ID");
 		var startResponse = await jobManager.StartAsync(workspaceID, jobID);
 
 		// Check for errors that occured during job start
 		if (!string.IsNullOrEmpty(startResponse.ErrorMessage))
 		{
-			OutputHelper.PrintError($"<{startResponse.ErrorCode}> {startResponse.ErrorMessage}");
+			_logger.LogError($"<{startResponse.ErrorCode}> {startResponse.ErrorMessage}");
 
 			return;
 		}
 
 		// Get status of the job and await for the completed state
-		OutputHelper.PrintLog("Awaiting job status updates");
+		_logger.LogInformation("Awaiting job status updates");
 		var jobResult = await this.WaitForJobToBeCompletedAsync(async () =>
 		{
 			return await jobManager.GetAsync(workspaceID, jobID);
@@ -174,7 +180,7 @@ public partial class BaseExportService
 				+ $"Records with errors: {jobResult.Value.RecordsWithErrors}\n"
 				+ $"Output URL: [orange1]{jobResult.Value.OutputUrl}[/]";
 
-		OutputHelper.PrintLog("Job Completed");
-		OutputHelper.PrintExportJobResult(resultData, jobResult);
+		_logger.LogInformation("Job Completed");
+		_logger.PrintExportJobResult(resultData, jobResult);
 	}
 }

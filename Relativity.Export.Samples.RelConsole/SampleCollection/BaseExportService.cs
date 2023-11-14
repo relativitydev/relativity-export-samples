@@ -8,18 +8,21 @@ namespace Relativity.Export.Samples.RelConsole.SampleCollection;
 
 public partial class BaseExportService
 {
+	private readonly Logger _logger;
 	private readonly IServiceFactory _serviceFactory;
 	private readonly string _host;
 	private readonly string _username;
 	private readonly string _password;
 
-	public BaseExportService(string host, string username, string password)
+	public BaseExportService(string host, string username, string password, string[] args = default!)
 	{
 		this._host = host;
 		this._username = username;
 		this._password = password;
 
 		this._serviceFactory = this.GetServiceFactory();
+
+		_logger = new Logger(args);
 	}
 
 	protected IServiceFactory GetServiceFactory()
@@ -65,7 +68,7 @@ public partial class BaseExportService
 					$"Export job ID: {jobStatus.ExportJobID}\n"
 					+ $"Job status: [aquamarine1]{jobStatus.Value.JobStatus}[/]";
 
-				OutputHelper.PrintLog(logData);
+				_logger.LogInformation(logData);
 
 				await Task.Delay(frequency);
 				retries = 3;
@@ -73,7 +76,7 @@ public partial class BaseExportService
 			catch (Exception) when (retries > 0)
 			{
 				retries--;
-				OutputHelper.PrintWarning($"Retrying job status fetching ({retries} retries left)");
+				_logger.LogWarning($"Retrying job status fetching ({retries} retries left)");
 				await Task.Delay(3000);
 
 			}
@@ -95,7 +98,7 @@ public partial class BaseExportService
 
 		if (jobStatus.Value.JobStatus == ExportStatus.Failed)
 		{
-			OutputHelper.PrintError($"{jobStatus.Value.ErrorCode} - {jobStatus.Value.ErrorMessage}");
+			_logger.LogError($"{jobStatus.Value.ErrorCode} - {jobStatus.Value.ErrorMessage}");
 		}
 
 		return jobStatus;

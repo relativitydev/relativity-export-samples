@@ -4,7 +4,7 @@ using Relativity.Export.Samples.RelConsole.Helpers;
 System.Console.OutputEncoding = Encoding.UTF8;
 System.Console.InputEncoding = Encoding.UTF8;
 
-string relativityUrl = "http://host/";
+string relativityUrl = "https://INSTANCE_NAME.relativity.one/";
 string username = "username";
 string password = "password";
 

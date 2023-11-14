@@ -23,15 +23,15 @@ public partial class BaseExportService
 
 		// Create and run the job to cancel
 		await ListSample_CreateJobAsync(jobManager, workspaceID, jobID);
-		OutputHelper.PrintLog("Job created");
+		_logger.LogInformation("Job created");
 
 		// Job must be running to be canceled
 		await jobManager.StartAsync(workspaceID, jobID);
-		OutputHelper.PrintLog($"Job with {jobID} ID started");
+		_logger.LogInformation($"Job with {jobID} ID started");
 
 		// Cancel the job
 		var result = await jobManager.CancelAsync(workspaceID, jobID);
-		OutputHelper.PrintLog($"Job with {jobID} ID canceled");
+		_logger.LogInformation($"Job with {jobID} ID canceled");
 
 		OutputHelper.UpdateStatus("Fetching resulting state");
 		var jobResult = await jobManager.GetAsync(workspaceID, jobID);
@@ -40,7 +40,7 @@ public partial class BaseExportService
 			+ $"Correlation ID: {jobResult.Value.CorrelationID}\n"
 			+ $"Job status: {jobResult.Value.JobStatus}";
 
-		OutputHelper.PrintLog(resultData);
+		_logger.LogInformation(resultData);
 	}
 
 	private async Task ListSample_CreateJobAsync(Relativity.Export.V1.IExportJobManager jobManager, int workspaceID, Guid jobID)
@@ -58,7 +58,7 @@ public partial class BaseExportService
 		string? applicationName = "Export-Service-Sample-App";
 		string? correlationID = "Sample-Job-0001";
 
-		OutputHelper.PrintSampleData(new Dictionary<string, string>
+		_logger.PrintSampleData(new Dictionary<string, string>
 		{
 			{"Workspace ID", workspaceID.ToString() },
 			{"View ID", viewID.ToString() },
@@ -143,7 +143,7 @@ public partial class BaseExportService
 			.Build();
 
 		// Create export job
-		OutputHelper.PrintLog("Creating job");
+		_logger.LogInformation("Creating job");
 		var validationResult = await jobManager.CreateAsync(
 			workspaceID,
 			jobID,
@@ -151,15 +151,21 @@ public partial class BaseExportService
 			applicationName,
 			correlationID);
 
+		if (validationResult is null)
+		{
+			_logger.LogError("Something went wrong with fetching response");
+			return;
+		}
+
 		// check validation result
 		if (!validationResult.IsSuccess)
 		{
-			OutputHelper.PrintError($"<{validationResult.ErrorCode}> {validationResult.ErrorMessage}");
+			_logger.LogError($"<{validationResult.ErrorCode}> {validationResult.ErrorMessage}");
 
 			// iterate errors and print them
 			foreach (var validationError in validationResult.Value.ValidationErrors)
 			{
-				OutputHelper.PrintError($"{validationError.Key} - {validationError.Value}");
+				_logger.LogError($"{validationError.Key} - {validationError.Value}");
 			}
 
 			return;

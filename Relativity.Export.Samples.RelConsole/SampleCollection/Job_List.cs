@@ -45,14 +45,14 @@ public partial class BaseExportService
 		var result = await jobManager.ListAsync(workspaceID, 0, 10);
 		var exportJobs = result.Value.Jobs;
 
-		OutputHelper.PrintLog("Export jobs list:");
+		_logger.LogInformation("Export jobs list:");
 		foreach (var job in exportJobs)
 		{
 			string jobDataString = $"Job ID: {job.ID}\n"
 				+ $"Application Name: {job.ApplicationName}\n"
 				+ $"Job Status: [aquamarine1]{job.JobStatus}[/]";
 
-			OutputHelper.PrintLog(jobDataString);
+			_logger.LogInformation(jobDataString);
 		}
 	}
 
@@ -72,7 +72,7 @@ public partial class BaseExportService
 		string? applicationName = "Export-Service-Sample-App";
 		string? correlationID = "Sample-Job-0001";
 
-		OutputHelper.PrintSampleData(new Dictionary<string, string>
+		_logger.PrintSampleData(new Dictionary<string, string>
 		{
 			{"Workspace ID", workspaceID.ToString() },
 			{"View ID", viewID.ToString() },
@@ -171,7 +171,7 @@ public partial class BaseExportService
 			.Build();
 
 		// Create export job
-		OutputHelper.PrintLog("Creating job");
+		_logger.LogInformation("Creating job");
 		var validationResult = await jobManager.CreateAsync(
 			workspaceID,
 			jobID,
@@ -179,20 +179,26 @@ public partial class BaseExportService
 			applicationName,
 			correlationID);
 
+		if (validationResult is null)
+		{
+			_logger.LogError("Something went wrong with fetching response");
+			return;
+		}
+
 		// check validation result
 		if (!validationResult.IsSuccess)
 		{
-			OutputHelper.PrintError($"<{validationResult.ErrorCode}> {validationResult.ErrorMessage}");
+			_logger.LogError($"<{validationResult.ErrorCode}> {validationResult.ErrorMessage}");
 
 			// iterate errors and print them
 			foreach (var validationError in validationResult.Value.ValidationErrors)
 			{
-				OutputHelper.PrintError($"{validationError.Key} - {validationError.Value}");
+				_logger.LogError($"{validationError.Key} - {validationError.Value}");
 			}
 
 			return;
 		}
 
-		OutputHelper.PrintLog("Job created successfully");
+		_logger.LogInformation("Job created successfully");
 	}
 }

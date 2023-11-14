@@ -10,19 +10,13 @@ using Spectre.Console.Rendering;
 namespace Relativity.Export.Samples.RelConsole.Helpers;
 
 public record class SampleMetadata(int ID, string Name, string Description = default!, bool IsSelected = false);
-public record class SampleLog(Level LogLevel, string Message);
-public enum Level
-{
-	Information,
-	Warning,
-	Error
-}
 
 public static class OutputHelper
 {
 	private static string[] _args = default!;
 	private static Dictionary<int, MethodInfo> _sampleRunner = new();
 	private static StatusContext _statusContext = default!;
+	private static object _statusLock = new();
 
 	public static async Task StartAsync(string[] args, string relativityUrl, string relativityUsername, string relativityPassword)
 	{
@@ -37,10 +31,6 @@ public static class OutputHelper
 
 			if (!args.Contains("-noui"))
 			{
-				var iconCanvas = new CanvasImage(Path.Join(AppContext.BaseDirectory, "Helpers", "logo.png"));
-				iconCanvas.MaxWidth(20);
-
-				var iconPanel = new Panel(iconCanvas).Expand().NoBorder();
 
 				var samplesPanel = GetSamplesPanel(samples);
 				var metadataPanel = GetSampleMetadataPanel(samples.FirstOrDefault(s => s.ID == selectedSampleId));
@@ -51,13 +41,13 @@ public static class OutputHelper
 					new Columns(metadataPanel)
 				};
 
-				AnsiConsole.Write(iconPanel);
+				PrintRelativityLogo();
 				AnsiConsole.Write(new Columns(dataColumns));
 			}
 
 			if (isSampleValid)
 			{
-				BaseExportService instance = new(relativityUrl, relativityUsername, relativityPassword);
+				BaseExportService instance = new(relativityUrl, relativityUsername, relativityPassword, args);
 
 				var runnableSample = _sampleRunner[selectedSampleId];
 
@@ -75,6 +65,34 @@ public static class OutputHelper
 
 				AnsiConsole.MarkupLine("[bold][aquamarine1]Sample finished![/][/]");
 			}
+			else if (args.Length == 0 || args.Contains("-help"))
+			{
+				var containerGrid = new Grid()
+					.AddColumn();
+
+				var options = new Grid()
+					.AddColumn(new GridColumn().NoWrap())
+					.AddColumn(new GridColumn().NoWrap());
+
+				options.AddRow("[aquamarine1][bold]{number}[/][/]", "Sample ID from the sample list");
+				options.AddRow("[aquamarine1][bold]-noui[/][/]", "disables some UI elements on the initial screen");
+				options.AddRow("[aquamarine1][bold]-json[/][/]", "adds additional JSON output to the console");
+
+				var example = new Panel("dotnet run 1 -json")
+					.RoundedBorder()
+					.BorderColor(Color.Orange1)
+					.Expand()
+					.Header("[aquamarine1]Example[/]", Justify.Center);
+
+				containerGrid.AddRow(options);
+				containerGrid.AddRow(example);
+
+				var argsPanel = new Panel(containerGrid)
+					.BorderColor(Color.Aquamarine1)
+					.Header("[orange1]Console Arguments[/]", Justify.Center);
+
+				AnsiConsole.Write(argsPanel);
+			}
 		}
 		catch (Exception ex)
 		{
@@ -82,119 +100,25 @@ public static class OutputHelper
 		}
 	}
 
+	public static void PrintRelativityLogo()
+	{
+		var iconCanvas = new CanvasImage(Path.Join(AppContext.BaseDirectory, "Helpers", "logo.png"));
+		iconCanvas.MaxWidth(20);
+
+		var iconPanel = new Panel(iconCanvas)
+			.Expand()
+			.NoBorder();
+
+		AnsiConsole.Write(iconPanel);
+	}
+
 	public static void UpdateStatus(string message)
 	{
-		_statusContext.Status($"[bold][orange1]{message}[/][/]");
-		_statusContext.Refresh();
-	}
-
-	public static void PrintExportJobResult(string finalMessage, ValueResponse<ExportJob> exportJob)
-	{
-		int processed = exportJob.Value.ProcessedRecords - exportJob.Value.RecordsWithErrors - exportJob.Value.RecordsWithWarnings ?? 0;
-
-		PrintLog(finalMessage);
-		AnsiConsole.WriteLine();
-		AnsiConsole.Write(new BreakdownChart()
-			.Width(60)
-			.AddItem("Processed", processed, Color.Green)
-			.AddItem("Records with errors", exportJob.Value.RecordsWithErrors ?? 0, Color.Red)
-			.AddItem("Records with warnings", exportJob.Value.RecordsWithWarnings ?? 0, Color.Yellow));
-	}
-
-	public static void PrintBulkExportJobResult(string finalMessage, List<ExportStatus?> exportStatuses)
-	{
-		int successJobs = exportStatuses.Count(s => s == ExportStatus.Completed);
-		int failedJobs = exportStatuses.Count(s => s == ExportStatus.Failed);
-		int cancelledJobs = exportStatuses.Count(s => s == ExportStatus.Cancelled);
-		int completedWithErrorsJobs = exportStatuses.Count(s => s == ExportStatus.CompletedWithErrors);
-
-		PrintLog(string.IsNullOrEmpty(finalMessage) ? "Bulk export completed" : finalMessage);
-		AnsiConsole.WriteLine();
-		AnsiConsole.Write(new BreakdownChart()
-			.Width(60)
-			.AddItem("Success", successJobs, Color.Green)
-			.AddItem("Completed With Errors", completedWithErrorsJobs, Color.OrangeRed1)
-			.AddItem("Failed", failedJobs, Color.Red)
-			.AddItem("Cancelled", cancelledJobs, Color.Yellow));
-	}
-
-	public static void PrintJobJson(ExportJobSettings settings, bool print = false)
-	{
-		if (!_args.Contains("-json"))
+		lock (_statusLock)
 		{
-			if (!print)
-				return;
+			_statusContext.Status($"[bold][orange1]{message}[/][/]");
+			_statusContext.Refresh();
 		}
-
-		// create JSON for preview
-		var serializerOptions = new JsonSerializerOptions()
-		{
-			WriteIndented = true,
-		};
-
-		var json = JsonSerializer.Serialize(settings, serializerOptions);
-
-		var panel = new Panel(new JsonText(json))
-			.RoundedBorder()
-			.BorderColor(Color.Orange1)
-			.Header("[aquamarine1]Job JSON[/]", Justify.Center);
-
-		AnsiConsole.Write(panel);
-	}
-
-	public static void PrintWarning(string message)
-	{
-		PrintLog(new SampleLog(Level.Warning, $"[orange1]{message}[/]"));
-	}
-
-	public static void PrintLog(string message)
-	{
-		PrintLog(new SampleLog(Level.Information, message));
-	}
-
-	public static void PrintError(string message)
-	{
-		PrintLog(new SampleLog(Level.Error, $"[red]{message}[/]"));
-	}
-
-	public static void PrintLog(SampleLog log)
-	{
-		var table = new Table()
-			.NoBorder()
-			.HideHeaders();
-
-		table.AddColumns(new TableColumn("Level").Width(8),
-			new TableColumn("Date"),
-			new TableColumn("Message"));
-
-		table.AddRow(new Markup(LevelToMessage(log.LogLevel)),
-			new Markup(DateTime.Now.ToString("HH:mm:ss"), new Style(Color.Orange1)),
-			new Markup(log.Message));
-
-		AnsiConsole.Write(table);
-	}
-
-	public static void PrintSampleData(Dictionary<string, string> data)
-	{
-		var dataGrid = new Grid()
-			.AddColumn(new GridColumn().NoWrap())
-			.AddColumn(new GridColumn().NoWrap());
-
-		foreach (var record in data)
-		{
-			dataGrid.AddRow(new Markup[]
-			{
-				new Markup($"[orange1]{record.Key}[/]"),
-				new Markup(record.Value)
-			});
-		}
-
-		var sampleData = new Panel(dataGrid)
-			.RoundedBorder()
-			.BorderColor(Color.Orange1)
-			.Header("[aquamarine1]Sample Data[/]", Justify.Center);
-
-		AnsiConsole.Write(sampleData);
 	}
 
 	private static List<SampleMetadata> GetSamples(int selectedSampleId)
@@ -220,14 +144,6 @@ public static class OutputHelper
 
 		return samples;
 	}
-
-	private static string LevelToMessage(Level logLevel) => logLevel switch
-	{
-		Level.Information => "[bold][aquamarine1]<INFO>[/][/]",
-		Level.Warning => "[bold][orange1]<WARN>[/][/]",
-		Level.Error => "[bold][red]<ERR>[/][/]",
-		_ => throw new ArgumentOutOfRangeException(nameof(logLevel), $"Not expected direction value: {logLevel}"),
-	};
 
 	private static Panel GetSampleMetadataPanel(SampleMetadata? sample)
 	{

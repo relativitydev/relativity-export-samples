@@ -27,11 +27,11 @@
 - [Powershell samples](#powershell-samples)
 
 # Introduction
-The *Relativity Export Service API* is a service of the Kepler suite, designed to facilitate the efficient export of documents, images, PDFs, native files, and Relativity Dynamic Objects (RDOs) from within Relativity workspaces. 
+The *Relativity Export Service API* is a service designed to facilitate the efficient export of documents, images, PDFs, native files, and Relativity Dynamic Objects (RDOs) from within Relativity workspaces. 
 
 This service leverages the RESTful API architecture to streamline the creation, configuration, and execution of export jobs, allowing for a seamless data transfer experience.
 
-With its advanced job and data source configuration options, the API offers a high degree of flexibility, enabling users to tailor the export process to specific requirements. 
+With its advanced job configuration options, the API offers a high degree of flexibility, enabling users to tailor the export process to specific requirements. 
 
 Moreover, the service incorporates error handling mechanisms to swiftly pinpoint and address any issues that may arise during the export process, ensuring a smooth and reliable operation.
 
@@ -42,7 +42,7 @@ Moreover, the service incorporates error handling mechanisms to swiftly pinpoint
    | **Export** | 4abc11b0-b3c7-4508-87f8-308185423caf | workspace |
    | **DataTransfer.Legacy** | 9f9d45ff-5dcd-462d-996d-b9033ea8cfce | instance |
 
-2. Appropriate user permissions need to be set. [link]
+2. [Appropriate user permissions need to be set.](https://github.com/relativitydev/relativity-export-samples/tree/main#permissions)
 3. For .NET Kepler Client install these nugets:
    - [Relativity.Export.SDK](https://www.nuget.org/packages/Relativity.Export.SDK)
    - [Relativity.Kepler.Client.SDK](https://www.nuget.org/packages/Relativity.Kepler.Client.SDK/) - for .NET Kepler Client
@@ -54,12 +54,10 @@ Moreover, the service incorporates error handling mechanisms to swiftly pinpoint
 
 **ExportJob** - Contains data about the job current state and progress. It is created during export job creation and is updated during export process.
 
-**DataSource** - The selected source of data to export. 
-
 **Kepler service** - API service created but using the Relativity Kepler framework. This framework provides you with the ability to build custom REST Endpoints via a .NET interface. Additionally, the Kepler framework includes a client proxy that you can use when interacting with the services through .NET. <br>
 [See more information](https://platform.relativity.com/RelativityOne/Content/Kepler_framework/Kepler_framework.htm#Client-s)
 
-**Item Error** - An error that may occur during the export process and concerns only one exported record from job. A common reason of these errors are invalid artifact IDs of the sources and objects to export.
+**Item Error** - An error that may occur during the export process and concerns only one exported record from job.
 
 # Getting started
 Export Service is built as a standard Relativity Kepler Service. It provides sets of endpoints that must be called sequentially in order to execute export. The following sections outline how to make calls to export service.
@@ -78,7 +76,7 @@ You can make calls to a export service using any standard REST or HTTP client, b
     // Basic authentication
     client.DefaultRequestHeaders.Add("Authorization", "Basic " + base64usernamePassword);
 
-    var createExportUri = $"{baseUrl}/v1/workspaces/{workspaceId}/jobs/{jobId}";
+    var createExportUri = $"{relativityUrl}/export/v1/workspaces/{workspaceId}/jobs/{jobId}";
     
     var response = await httpClient.PostAsJsonAsync(createExportUri, payload);
 ```
@@ -174,7 +172,6 @@ The following Relativity permissions are required to use export features provide
 
 | Object Security Section | Permissions |
 | --- | --- |
-| Import/Export Job | `Add` `Edit` |
 | Production | `View` |
 | Relativity Export Service Job | `Add` `Edit` `View` |
 
@@ -196,7 +193,7 @@ Main components of export job settings are:
 - `ExportArtifactSettings` - contains information about artifacts to export
 - `ExportOutputSettings` - contains information about output format and structure of exported files
   
-Which are all later combined into `ExportJobSettings`.
+which are all later combined into `ExportJobSettings`.
 
 The following example shows how to create export job settings using builders that exports native, fulltext, images and PDF files from folder.
 
@@ -578,8 +575,21 @@ var validationResult = await jobManager.CreateAsync(
     applicationName,
     correlationID);
 ```
+3. Start export job
+> .NET Kepler
+```cs
+// Start export job
+var startResponse = await jobManager.StartAsync(workspaceID, jobID);
 
-3. Check export job status
+// Check for errors that occured during job start
+if (!string.IsNullOrEmpty(startResponse.ErrorMessage))
+{
+    _logger.LogError($"<{startResponse.ErrorCode}> {startResponse.ErrorMessage}");
+    // ...
+}
+```
+
+4. Check export job status
 > .NET Kepler
 ```cs
 do
@@ -716,7 +726,7 @@ string password = "password";
 await OutputHelper.StartAsync(args, relativityUrl, username, password);
 ```
 2. Replace the required variables within the samples<br>
-   For example in `Export_FromFolder_NativeFiles`[link] sample replace 
+   For example in [Export_FromFolder_NativeFiles](https://github.com/relativitydev/relativity-export-samples/blob/main/Relativity.Export.Samples.RelConsole/SampleCollection/Export_Folder_NativeFiles.cs) sample replace 
 ```cs
 // ...
 // with your workspace ID
