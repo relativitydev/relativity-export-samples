@@ -139,8 +139,8 @@ You can also find factory implementations in the `Relativity.Kepler.Client.SDK` 
 `Relativity.Export.SDK` is a .NET library that contains kepler interfaces for export service. <br>
 It provides and simplifies executing export in client application. `Relativity.Export.SDK` targets `.NET Framework 4.6.2` and `.NET standard 2.0`.
 
-![Version](https://img.shields.io/nuget/v/Relativity.Export.SDK?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FRelativity.Export.SDK)
-![Nuget](https://img.shields.io/nuget/dt/Relativity.Export.SDK?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FRelativity.Export.SDK)
+[![Version](https://img.shields.io/nuget/v/Relativity.Export.SDK?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FRelativity.Export.SDK)](https://www.nuget.org/packages/Relativity.Export.SDK)
+[![Nuget](https://img.shields.io/nuget/dt/Relativity.Export.SDK?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FRelativity.Export.SDK)](https://www.nuget.org/packages/Relativity.Export.SDK)
 
 ### Installing via NuGet
 
@@ -159,8 +159,8 @@ dotnet add package Relativity.Export.SDK
 Public Relativity Kepler Client SDK. <br>
 Contains implementation of factories for kepler services and proxies.
 
-![Version](https://img.shields.io/nuget/v/Relativity.Kepler.Client.SDK?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FRelativity.Kepler.Client.SDK)
-![Downloads](https://img.shields.io/nuget/dt/Relativity.Kepler.Client.SDK)
+[![Version](https://img.shields.io/nuget/v/Relativity.Kepler.Client.SDK?link=https%3A%2F%2Fwww.nuget.org%2Fpackages%2FRelativity.Kepler.Client.SDK)](https://www.nuget.org/packages/Relativity.Kepler.Client.SDK/)
+[![Downloads](https://img.shields.io/nuget/dt/Relativity.Kepler.Client.SDK)](https://www.nuget.org/packages/Relativity.Kepler.Client.SDK/)
 
 ### Installing via NuGet
 
