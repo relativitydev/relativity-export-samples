@@ -81,6 +81,7 @@ public partial class BaseExportService
 		var loadfileSettings = LoadFileSettingsBuilder.Create()
 			.WithoutExportingMsAccess()
 			.WithoutCustomCultureInfo()
+			.WithCustomDateTimeFormat("O")
 			.WithLoadFileFormat(LoadFileFormat.CSV)
 			.WithEncoding("UTF-8")
 			.WithImageLoadFileFormat(ImageLoadFileFormat.IPRO)

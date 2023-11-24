@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Relativity.Export.SDK" Version="3.2.0" />
+		<PackageReference Include="Relativity.Export.SDK" Version="3.2.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Spectre.Console" Version="0.47.0" />
-    <PackageReference Include="Relativity.Kepler" Version="2.20.0" />
+    <PackageReference Include="Relativity.Kepler" Version="2.21.0" />
     <PackageReference Include="Relativity.Kepler.Client.SDK" Version="2.20.0" />
     <PackageReference Include="Spectre.Console.ImageSharp" Version="0.47.0" />
     <PackageReference Include="Spectre.Console.Json" Version="0.47.0" />

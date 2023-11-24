@@ -94,6 +94,7 @@ public partial class BaseExportService
 		{
 			settingsBuilder.WithoutExportingMsAccess()
 				.WithCustomCultureInfo("en-US")
+				.WithDefaultDateTimeFormat()
 				.WithLoadFileFormat(LoadFileFormat.CSV)
 				.WithEncoding("UTF-8")
 				.WithImageLoadFileFormat(ImageLoadFileFormat.IPRO)

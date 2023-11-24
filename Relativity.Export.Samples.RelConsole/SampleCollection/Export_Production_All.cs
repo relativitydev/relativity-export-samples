@@ -60,7 +60,7 @@ public partial class BaseExportService
 			.ExportNative(settings => settings
 				.WithNativePrecedenceArtifactIDs(new List<int> { productionID })) // Exports native files
 			.ExportPdf() // Export PDF files
-			.WithFieldArtifactIDs(new List<int> { 1003676, 1003667 }) // Fields to export
+			.WithFieldArtifactIDs(new List<int> { 1003676, 1003667, 1035354 }) // Fields to export
 			.WithoutExportingMultiChoicesAsNested()
 			.Build();
 
@@ -101,12 +101,17 @@ public partial class BaseExportService
 		var loadfileSettings = LoadFileSettingsBuilder.Create()
 			.WithoutExportingMsAccess()
 			.WithoutCustomCultureInfo()
+			.WithDefaultDateTimeFormat()
 			.WithLoadFileFormat(LoadFileFormat.CSV)
 			.WithEncoding("UTF-8")
 			.WithImageLoadFileFormat(ImageLoadFileFormat.IPRO_FullText)
 			.WithPdfFileFormat(PdfLoadFileFormat.IPRO_FullText)
 			.WithDelimiterSettings(delimiters =>
-				delimiters.WithDefaultDelimiters())
+				delimiters.WithCustomRecordDelimiters(',')
+					.WithQuoteDelimiter('"')
+					.WithNewLineDelimiter('\n')
+					.WithNestedValueDelimiter(';')
+					.WithMultiValueDelimiter('|'))
 			.Build();
 
 		// Output settings

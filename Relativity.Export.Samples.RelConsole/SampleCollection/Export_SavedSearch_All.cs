@@ -86,6 +86,7 @@ public partial class BaseExportService
 					.WithLoadFileSettings(loadFileSettings => // Loadfile settings
 						loadFileSettings.WithoutExportingMsAccess()
 							.WithoutCustomCultureInfo()
+							.WithDefaultDateTimeFormat()
 							.WithLoadFileFormat(LoadFileFormat.CSV)
 							.WithEncoding("UTF-8")
 							.WithImageLoadFileFormat(ImageLoadFileFormat.IPRO)
