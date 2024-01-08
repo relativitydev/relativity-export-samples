@@ -52,6 +52,7 @@ public partial class BaseExportService
 			.WithExportOutputSettings(settings => // Export output settings
 				settings.WithoutArchiveCreation()
 					.WithDefaultFolderStructure()
+					.WithoutTransferJobID()
 					.WithDefaultDestinationPath()
 					.WithSubdirectorySettings(subSettings => // Subdirectory settings
 						subSettings.WithSubdirectoryStartNumber(1)
@@ -143,6 +144,8 @@ public partial class BaseExportService
 				+ $"Job error count: {jobResult.Value.JobErrorsCount}\n"
 				+ $"Total records: {jobResult.Value.TotalRecords}\n"
 				+ $"Processed records: {jobResult.Value.ProcessedRecords}\n"
+				+ $"Exported files count: {jobResult.Value.ExportedFilesCount}\n"
+				+ $"Total size of exported files: {jobResult.Value.TotalSizeOfExportedFiles}\n"
 				+ $"Records with warnings: {jobResult.Value.RecordsWithErrors}\n"
 				+ $"Records with errors: {jobResult.Value.RecordsWithErrors}\n"
 				+ $"Output URL: [orange1]{jobResult.Value.OutputUrl}[/]";

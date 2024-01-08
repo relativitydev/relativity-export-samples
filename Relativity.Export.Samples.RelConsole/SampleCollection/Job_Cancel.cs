@@ -130,6 +130,7 @@ public partial class BaseExportService
 		var outputSettings = ExportOutputSettingsBuilder.Create()
 			.WithoutArchiveCreation()
 			.WithDefaultFolderStructure()
+			.WithoutTransferJobID()
 			.WithDefaultDestinationPath()
 			.WithSubdirectorySettings(subdirectorySettings)
 			.WithVolumeSettings(volumeSettings)
