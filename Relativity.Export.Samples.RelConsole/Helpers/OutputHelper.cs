@@ -121,6 +121,15 @@ public static class OutputHelper
 		}
 	}
 
+	public static void ClearStatus()
+	{
+		lock (_statusLock)
+		{
+			_statusContext.Status("...");
+			_statusContext.Refresh();
+		}
+	}
+
 	private static List<SampleMetadata> GetSamples(int selectedSampleId)
 	{
 		List<SampleMetadata> samples = new();

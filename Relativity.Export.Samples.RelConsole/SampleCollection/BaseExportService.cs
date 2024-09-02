@@ -35,7 +35,7 @@ public partial class BaseExportService
 		return new ServiceFactory(settings);
 	}
 
-	private async Task<ValueResponse<ExportJob>> WaitForJobToBeCompletedAsync(Func<Task<ValueResponse<ExportJob>>> job, bool updateStatus = true, int frequency = 1000)
+	private async Task<ValueResponse<ExportJob>> WaitForJobToBeCompletedAsync(Func<Task<ValueResponse<ExportJob>>> job, bool updateStatus = true, int frequency = 5_000)
 	{
 		ValueResponse<ExportJob>? jobStatus = null;
 		CancellationTokenSource tokenSource = new();

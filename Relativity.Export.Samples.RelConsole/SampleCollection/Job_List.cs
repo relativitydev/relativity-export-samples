@@ -43,16 +43,18 @@ public partial class BaseExportService
 		// Get list of the existing export jobs
 		OutputHelper.UpdateStatus("Fetching export jobs list");
 		var result = await jobManager.ListAsync(workspaceID, 0, 10);
-		var exportJobs = result.Value.Jobs;
+		List<ExportJob> exportJobs = result.Value.Jobs;
 
 		_logger.LogInformation("Export jobs list:");
 		foreach (var job in exportJobs)
 		{
 			string jobDataString = $"Job ID: {job.ID}\n"
 				+ $"Application Name: {job.ApplicationName}\n"
-				+ $"Job Status: [aquamarine1]{job.JobStatus}[/]";
+				+ $"Job Status: [aquamarine1]{job.JobStatus}[/]\n"
+				+ $"Output URL: [orange1]{job.ExportJobOutput.OutputUrl ?? ""}[/]\n"
+				+ $"Is output deleted: [orange1]{job.IsOutputDeleted}[/]\n";
 
-			_logger.LogInformation(jobDataString);
+			_logger.PrintExportJobResult(jobDataString, job);
 		}
 	}
 

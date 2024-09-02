@@ -6,7 +6,7 @@ using Spectre.Console.Json;
 
 namespace Relativity.Export.Samples.RelConsole.Helpers;
 
-public record class SampleLog(LogLevel LogLevel, string Message);
+public record class SampleLog(LogLevel LogLevel, string Message, bool HideTimeStamp = false);
 public enum LogLevel
 {
 	Information,
@@ -48,19 +48,19 @@ public class Logger
 	}
 
 
-	public void LogWarning(string message)
+	public void LogWarning(string message, bool hideTimeStamp = false)
 	{
-		Log(new SampleLog(LogLevel.Warning, $"[orange1]{message}[/]"));
+		Log(new SampleLog(LogLevel.Warning, $"[orange1]{message}[/]", hideTimeStamp));
 	}
 
-	public void LogInformation(string message)
+	public void LogInformation(string message, bool hideTimeStamp = false)
 	{
-		Log(new SampleLog(LogLevel.Information, message));
+		Log(new SampleLog(LogLevel.Information, message, hideTimeStamp));
 	}
 
-	public void LogError(string message)
+	public void LogError(string message, bool hideTimeStamp = false)
 	{
-		Log(new SampleLog(LogLevel.Error, $"[red]{message}[/]"));
+		Log(new SampleLog(LogLevel.Error, $"[red]{message}[/]", hideTimeStamp));
 	}
 
 	public void Log(SampleLog log)
@@ -73,9 +73,24 @@ public class Logger
 			new TableColumn("Date"),
 			new TableColumn("Message"));
 
-		table.AddRow(new Markup(LevelToMessage(log.LogLevel)),
-			new Markup(DateTime.Now.ToString("HH:mm:ss"), new Style(Color.Orange1)),
-			new Markup(log.Message));
+		if (log.HideTimeStamp)
+		{
+			table.AddColumns(new TableColumn("Level").Width(8),
+				new TableColumn("Message"));
+
+			table.AddRow(new Markup(LevelToMessage(log.LogLevel)),
+				new Markup(log.Message));
+		}
+		else
+		{
+			table.AddColumns(new TableColumn("Level").Width(8),
+				new TableColumn("Date"),
+				new TableColumn("Message"));
+
+			table.AddRow(new Markup(LevelToMessage(log.LogLevel)),
+				new Markup(DateTime.Now.ToString("HH:mm:ss"), new Style(Color.Orange1)),
+				new Markup(log.Message));
+		}
 
 		AnsiConsole.Write(table);
 	}
@@ -103,17 +118,18 @@ public class Logger
 		AnsiConsole.Write(sampleData);
 	}
 
-	public void PrintExportJobResult(string finalMessage, ValueResponse<ExportJob> exportJob)
+	public void PrintExportJobResult(string finalMessage, ExportJob exportJob)
 	{
-		int processed = exportJob.Value.ProcessedRecords - exportJob.Value.RecordsWithErrors - exportJob.Value.RecordsWithWarnings ?? 0;
+		int processed = exportJob.ProcessedRecords - exportJob.RecordsWithErrors - exportJob.RecordsWithWarnings ?? 0;
 
-		LogInformation(finalMessage);
+		LogInformation(finalMessage, hideTimeStamp: true);
 		AnsiConsole.WriteLine();
 		AnsiConsole.Write(new BreakdownChart()
 			.Width(60)
 			.AddItem("Processed", processed, Color.Green)
-			.AddItem("Records with errors", exportJob.Value.RecordsWithErrors ?? 0, Color.Red)
-			.AddItem("Records with warnings", exportJob.Value.RecordsWithWarnings ?? 0, Color.Yellow));
+			.AddItem("Records with errors", exportJob.RecordsWithErrors ?? 0, Color.Red)
+			.AddItem("Records with warnings", exportJob.RecordsWithWarnings ?? 0, Color.Yellow));
+		AnsiConsole.WriteLine();
 	}
 
 	public void PrintBulkExportJobResult(string finalMessage, List<ExportStatus?> exportStatuses)
@@ -123,7 +139,7 @@ public class Logger
 		int cancelledJobs = exportStatuses.Count(s => s == ExportStatus.Cancelled);
 		int completedWithErrorsJobs = exportStatuses.Count(s => s == ExportStatus.CompletedWithErrors);
 
-		LogInformation(string.IsNullOrEmpty(finalMessage) ? "Bulk export completed" : finalMessage);
+		LogInformation(string.IsNullOrEmpty(finalMessage) ? "Bulk export completed" : finalMessage, hideTimeStamp: true);
 		AnsiConsole.WriteLine();
 		AnsiConsole.Write(new BreakdownChart()
 			.Width(60)
@@ -131,6 +147,7 @@ public class Logger
 			.AddItem("Completed With Errors", completedWithErrorsJobs, Color.OrangeRed1)
 			.AddItem("Failed", failedJobs, Color.Red)
 			.AddItem("Cancelled", cancelledJobs, Color.Yellow));
+		AnsiConsole.WriteLine();
 	}
 
 	private string LevelToMessage(LogLevel logLevel) => logLevel switch
