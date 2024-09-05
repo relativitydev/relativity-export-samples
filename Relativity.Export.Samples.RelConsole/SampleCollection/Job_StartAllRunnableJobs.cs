@@ -271,7 +271,7 @@ public partial class BaseExportService
 				+ $"Total size of exported files: {jobResult.Value.TotalSizeOfExportedFiles}\n"
 				+ $"Records with warnings: {jobResult.Value.RecordsWithErrors}\n"
 				+ $"Records with errors: {jobResult.Value.RecordsWithErrors}\n"
-				+ $"Output URL: [orange1]{jobResult.Value.OutputUrl}[/]";
+				+ $"Output URL: [orange1]{jobResult.Value.ExportJobOutput.OutputUrl}[/]";
 
 		_logger.LogInformation("Job Completed");
 
