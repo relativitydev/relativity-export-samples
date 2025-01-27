@@ -60,7 +60,8 @@ public partial class BaseExportService
 					.ExportNative(settings => settings.WithNativePrecedenceArtifactIDs(new List<int> { -1 })) // Exports native files
 					.ExportPdf() // Export PDF files
 					.WithFieldArtifactIDs(new List<int> { 1003676, 1003667 }) // Fields to export
-					.ExportMultiChoicesAsNested())
+					.WithoutFieldAliases()
+                    .ExportMultiChoicesAsNested())
 			.WithExportOutputSettings(settings => // Export output settings
 				settings.WithoutArchiveCreation()
 					.WithDefaultFolderStructure()

@@ -48,7 +48,8 @@ public partial class BaseExportService
 					.WithoutExportingNative()
 					.ExportPdf()
 					.WithFieldArtifactIDs(new List<int> { 1003676, 1003667 }) // Fields to export
-					.ExportMultiChoicesAsNested())
+					.WithoutFieldAliases()
+                    .ExportMultiChoicesAsNested())
 			.WithExportOutputSettings(settings => // Export output settings
 				settings.WithoutArchiveCreation()
 					.WithDefaultFolderStructure()

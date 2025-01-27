@@ -124,7 +124,8 @@ public partial class BaseExportService
 				.WithNativePrecedenceArtifactIDs(new List<int> { -1 })) // Exports native files
 			.ExportPdf() // Export PDF files
 			.WithFieldArtifactIDs(new List<int> { 1003676, 1003667 }) // Fields to export
-			.WithoutExportingMultiChoicesAsNested()
+			.WithoutFieldAliases()
+            .WithoutExportingMultiChoicesAsNested()
 			.Build();
 
 		// Subdirectory settings

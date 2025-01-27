@@ -62,7 +62,8 @@ public partial class BaseExportService
 			.WithoutExportingNative()
 			.WithoutExportingPdf()
 			.WithFieldArtifactIDs(new List<int> { 1003676, 1003667 }) // Fields to export
-			.ExportMultiChoicesAsNested()
+			.WithoutFieldAliases()
+            .ExportMultiChoicesAsNested()
 			.Build();
 
 		// Subdirectory settings
@@ -100,7 +101,7 @@ public partial class BaseExportService
 
 		// Output settings
 		var outputSettings = ExportOutputSettingsBuilder.Create()
-			.WithoutArchiveCreation()
+			.WithArchiveCreation()
 			.WithDefaultFolderStructure()
 			.WithoutTransferJobID()
 			.WithDefaultDestinationPath()
