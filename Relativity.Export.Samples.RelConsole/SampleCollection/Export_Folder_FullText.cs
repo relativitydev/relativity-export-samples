@@ -65,7 +65,7 @@ public partial class BaseExportService
 			.WithoutExportingPdf()
 			.WithFieldArtifactIDs(new List<int> { 1003676, 1003667 })
 			.WithoutFieldAliases()
-            .WithoutExportingMultiChoicesAsNested()
+			.WithoutExportingMultiChoicesAsNested()
 			.Build();
 
 		// Subdirectory settings

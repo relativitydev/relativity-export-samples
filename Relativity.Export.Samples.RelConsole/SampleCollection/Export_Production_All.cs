@@ -62,7 +62,7 @@ public partial class BaseExportService
 			.ExportPdf() // Export PDF files
 			.WithFieldArtifactIDs(new List<int> { 1003676, 1003667, 1035354 }) // Fields to export
 			.WithoutFieldAliases()
-            .WithoutExportingMultiChoicesAsNested()
+			.WithoutExportingMultiChoicesAsNested()
 			.Build();
 
 		// Subdirectory settings
