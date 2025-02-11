@@ -46,6 +46,7 @@ public partial class BaseExportService
 			.ExportNative(settings => settings.WithNativePrecedenceArtifactIDs(new List<int> { productionID })) // Exports native files
 			.WithoutExportingPdf()
 			.WithFieldArtifactIDs(new List<int> { 1003676, 1003667 }) // Fields to export
+			.WithoutFieldAliases()
 			.WithoutExportingMultiChoicesAsNested()
 			.Build();
 

@@ -68,6 +68,7 @@ public partial class BaseExportService
 				.WithoutExportingNative()
 				.WithoutExportingPdf() // Export PDF files
 				.WithFieldArtifactIDs(new List<int>() { 1036665 }) // Fields to export
+				.WithoutFieldAliases()
 				.ExportMultiChoicesAsNested();
 		};
 
@@ -106,7 +107,7 @@ public partial class BaseExportService
 		// Output settings
 		Action<IExportOutputSettingsBuilder> outputSettingsBuilder = (settingsBuilder) =>
 		{
-			settingsBuilder.WithArchiveCreation()
+			settingsBuilder.WithArchiveCreation(ArchiveNameFormat.WithDataSourceNameAndDate)
 				.WithCustomFolderStructure(FolderStructure.Classic)
 				.WithoutTransferJobID()
 				.WithDefaultDestinationPath()

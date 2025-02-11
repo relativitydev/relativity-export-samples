@@ -53,6 +53,7 @@ public partial class BaseExportService
 			.WithoutExportingNative()
 			.ExportPdf() // Exports only PDF
 			.WithFieldArtifactIDs(new List<int> { 1003676, 1003667 }) // Fields to export
+			.WithoutFieldAliases()
 			.WithoutExportingMultiChoicesAsNested()
 			.Build();
 

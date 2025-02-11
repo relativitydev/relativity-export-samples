@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-		<PackageReference Include="Relativity.Export.SDK" Version="3.4.1" />
+		<PackageReference Include="Relativity.Export.SDK" Version="3.6.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Spectre.Console" Version="0.49.1" />
     <PackageReference Include="Relativity.Kepler" Version="2.21.0" />
