@@ -10,7 +10,7 @@ public record class RunnableJobResult(string ResultMessage, ExportStatus? Result
 
 public partial class BaseExportService
 {
-	[SampleMetadata(18, nameof(Job_StartAllRunnableJobs), "Starts all runnable export jobs")]
+	[SampleMetadata(nameof(Job_StartAllRunnableJobs), "Starts all runnable export jobs")]
 	public async Task Job_StartAllRunnableJobs()
 	{
 		// Your workspace ID.

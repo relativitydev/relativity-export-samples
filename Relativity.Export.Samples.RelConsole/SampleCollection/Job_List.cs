@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Relativity.Export.Samples.RelConsole.Helpers;
 using Relativity.Export.V1.Builders.ExportSettings;
 using Relativity.Export.V1.Model;
@@ -8,7 +7,7 @@ namespace Relativity.Export.Samples.RelConsole.SampleCollection;
 
 public partial class BaseExportService
 {
-	[SampleMetadata(17, nameof(Job_ListExportJobs), "Lists export jobs")]
+	[SampleMetadata(nameof(Job_ListExportJobs), "Lists export jobs")]
 	public async Task Job_ListExportJobs()
 	{
 		// Your workspace ID.

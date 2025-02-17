@@ -5,7 +5,7 @@ namespace Relativity.Export.Samples.RelConsole.SampleCollection;
 
 public partial class BaseExportService
 {
-	[SampleMetadata(22, nameof(Job_Delete_Files), "Deletes exported files of specified export job")]
+	[SampleMetadata(nameof(Job_Delete_Files), "Deletes exported files of specified export job")]
 	public async Task Job_Delete_Files()
 	{
 		// Your workspace ID.

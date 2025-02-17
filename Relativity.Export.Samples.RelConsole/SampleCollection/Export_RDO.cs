@@ -6,7 +6,7 @@ namespace Relativity.Export.Samples.RelConsole.SampleCollection;
 
 public partial class BaseExportService
 {
-	[SampleMetadata(16, nameof(Export_RDO), "Exports RDO objects")]
+	[SampleMetadata(nameof(Export_RDO), "Exports RDO objects")]
 	public async Task Export_RDO()
 	{
 		// Your workspace ID.

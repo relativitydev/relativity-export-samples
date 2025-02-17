@@ -1,10 +1,6 @@
 using System.Reflection;
-using System.Text.Json;
 using Relativity.Export.Samples.RelConsole.SampleCollection;
-using Relativity.Export.V1.Model;
-using Relativity.Export.V1.Model.ExportJobSettings;
 using Spectre.Console;
-using Spectre.Console.Json;
 using Spectre.Console.Rendering;
 
 namespace Relativity.Export.Samples.RelConsole.Helpers;
@@ -35,11 +31,11 @@ public static class OutputHelper
 				var samplesPanel = GetSamplesPanel(samples);
 				var metadataPanel = GetSampleMetadataPanel(samples.FirstOrDefault(s => s.ID == selectedSampleId));
 
-				Columns[] dataColumns = new Columns[]
-				{
+				Columns[] dataColumns =
+				[
 					new Columns(samplesPanel),
 					new Columns(metadataPanel)
-				};
+				];
 
 				PrintRelativityLogo();
 				AnsiConsole.Write(new Columns(dataColumns));
@@ -139,16 +135,28 @@ public static class OutputHelper
 			 .Where(method => method.GetCustomAttributes(typeof(SampleMetadataAttribute), false).Length > 0)
 			 .ToArray();
 
-		foreach (var method in sampleMethods)
-		{
-			var typeMeta = method.GetCustomAttribute<SampleMetadataAttribute>();
+		var samplesMetadataAttribute = sampleMethods.Select(m => m.GetCustomAttribute<SampleMetadataAttribute>())
+			.OrderBy(x => x?.Name)
+			.ToArray();
 
-			if (typeMeta is null)
+		for (int i = 0; i < samplesMetadataAttribute.Length; i++)
+		{
+			var data = samplesMetadataAttribute[i];
+
+			// Sample ID is 1-based
+			// Automatically assigned to the sample based on alphabetical order of samples names
+			var sampleID = i + 1;
+
+			if (data is null)
 				continue;
 
-			samples.Add(new SampleMetadata(typeMeta.ID, typeMeta.Name, typeMeta.Description ?? "No description", typeMeta.ID == selectedSampleId));
+			var sampleMetadata = new SampleMetadata(ID: sampleID,
+				data.Name,
+				!string.IsNullOrEmpty(data.Description) ? data.Description : "No description",
+				sampleID == selectedSampleId); // is sample currently selected
 
-			_sampleRunner.Add(typeMeta.ID, method);
+			samples.Add(sampleMetadata);
+			_sampleRunner.Add(i + 1, sampleMethods[i]);
 		}
 
 		return samples;

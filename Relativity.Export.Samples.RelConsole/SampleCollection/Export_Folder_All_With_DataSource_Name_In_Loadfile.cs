@@ -6,8 +6,8 @@ namespace Relativity.Export.Samples.RelConsole.SampleCollection;
 
 public partial class BaseExportService
 {
-	[SampleMetadata(21, nameof(Export_Folder_All_With_DataSource_Name_In_Loadfile), "Exports native, fulltext, images and PDF files from folder. Exported laodfiles names contians DataSource name and date.")]
-	public async Task Export_Folder_All_With_DataSource_Name_In_Loadfile()
+	[SampleMetadata(nameof(Export_FromFolder_All_With_DataSource_Name_In_Loadfile), "Exports native, fulltext, images and PDF files from folder. Exported laodfiles names contians DataSource name and date.")]
+	public async Task Export_FromFolder_All_With_DataSource_Name_In_Loadfile()
 	{
 		// Your workspace ID.
 		// This is where we point to the workspace where we want to export from.
