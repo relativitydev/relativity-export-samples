@@ -45,7 +45,7 @@ public static class OutputHelper
 			{
 				BaseExportService instance = new(relativityUrl, relativityUsername, relativityPassword, args);
 
-				var runnableSample = _sampleRunner[selectedSampleId];
+				var runnableSample = _sampleRunner[selectedSampleId - 1];
 
 				await AnsiConsole.Status()
 					.StartAsync("Thinking...", async ctx =>

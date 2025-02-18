@@ -23,31 +23,6 @@ public class Logger
 		_args = args;
 	}
 
-	public void PrintJobJson(ExportJobSettings settings, bool print = false)
-	{
-		if (!_args.Contains("-json"))
-		{
-			if (!print)
-				return;
-		}
-
-		// create JSON for preview
-		var serializerOptions = new JsonSerializerOptions()
-		{
-			WriteIndented = true,
-		};
-
-		var json = JsonSerializer.Serialize(settings, serializerOptions);
-
-		var panel = new Panel(new JsonText(json))
-			.RoundedBorder()
-			.BorderColor(Color.Orange1)
-			.Header("[aquamarine1]Job JSON[/]", Justify.Center);
-
-		AnsiConsole.Write(panel);
-	}
-
-
 	public void LogWarning(string message, bool hideTimeStamp = false)
 	{
 		Log(new SampleLog(LogLevel.Warning, $"[orange1]{message}[/]", hideTimeStamp));
@@ -95,7 +70,41 @@ public class Logger
 		AnsiConsole.Write(table);
 	}
 
+	public void PrintJobJson(ExportJobSettings settings, bool print = false)
+	{
+		if (!_args.Contains("-json"))
+		{
+			if (!print)
+				return;
+		}
+
+		// create JSON for preview
+		var serializerOptions = new JsonSerializerOptions()
+		{
+			WriteIndented = true,
+		};
+
+		var json = JsonSerializer.Serialize(settings, serializerOptions);
+
+		var panel = new Panel(new JsonText(json))
+			.RoundedBorder()
+			.BorderColor(Color.Orange1)
+			.Header("[aquamarine1]Job JSON[/]", Justify.Center);
+
+		AnsiConsole.Write(panel);
+	}
+
+	public void PrintAliases(Dictionary<int, string> data)
+	{
+		PrintDictionaryData(data, "Field Aliases");
+	}
+
 	public void PrintSampleData(Dictionary<string, string> data)
+	{
+		PrintDictionaryData(data, "Sample Data");
+	}
+
+	public void PrintDictionaryData<K, V>(Dictionary<K, V> data, string header) where K : notnull
 	{
 		var dataGrid = new Grid()
 			.AddColumn(new GridColumn().NoWrap())
@@ -103,17 +112,17 @@ public class Logger
 
 		foreach (var record in data)
 		{
-			dataGrid.AddRow(new Markup[]
-			{
+			dataGrid.AddRow(
+			[
 				new Markup($"[orange1]{record.Key}[/]"),
-				new Markup(record.Value)
-			});
+				new Markup(record.Value?.ToString() ?? "#null")
+			]);
 		}
 
 		var sampleData = new Panel(dataGrid)
 			.RoundedBorder()
 			.BorderColor(Color.Orange1)
-			.Header("[aquamarine1]Sample Data[/]", Justify.Center);
+			.Header($"[aquamarine1]{header}[/]", Justify.Center);
 
 		AnsiConsole.Write(sampleData);
 	}
