@@ -20,7 +20,6 @@ public static class OutputHelper
 		try
 		{
 			_args = args;
-			List<SampleMetadata> samples;
 			int selectedSampleId = -1;
 			bool isSampleValid = args.Length > 0 && Int32.TryParse(args[0], out selectedSampleId);
 
