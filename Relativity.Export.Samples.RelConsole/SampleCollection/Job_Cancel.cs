@@ -19,7 +19,7 @@ public partial class BaseExportService
 		Guid jobID = Guid.NewGuid();
 
 		// Create job manager from service factory
-		using Relativity.Export.V1.IExportJobManager jobManager = this._serviceFactory.CreateProxy<Relativity.Export.V1.IExportJobManager>();
+		using Relativity.Export.V1.IExportJobManager jobManager = _serviceFactory.CreateProxy<Relativity.Export.V1.IExportJobManager>();
 
 		// Create and run the job to cancel
 		await ListSample_CreateJobAsync(jobManager, workspaceID, jobID);

@@ -19,7 +19,7 @@ public partial class BaseExportService
 		OutputHelper.UpdateStatus("Preparing job...");
 
 		// Create job manager from service factory
-		using Relativity.Export.V1.IExportJobManager jobManager = this._serviceFactory.CreateProxy<Relativity.Export.V1.IExportJobManager>();
+		using Relativity.Export.V1.IExportJobManager jobManager = _serviceFactory.CreateProxy<Relativity.Export.V1.IExportJobManager>();
 
 		// Create a sample job to fetch settings from
 		await GetSettingsSample_CreateJobAsync(jobManager, workspaceID, jobID);
