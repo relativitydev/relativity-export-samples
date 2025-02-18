@@ -94,16 +94,6 @@ public class Logger
 		AnsiConsole.Write(panel);
 	}
 
-	public void PrintAliases(Dictionary<int, string> data)
-	{
-		PrintDictionaryData(data, "Field Aliases");
-	}
-
-	public void PrintSampleData(Dictionary<string, string> data)
-	{
-		PrintDictionaryData(data, "Sample Data");
-	}
-
 	public void PrintDictionaryData<K, V>(Dictionary<K, V> data, string header) where K : notnull
 	{
 		var dataGrid = new Grid()
@@ -125,38 +115,6 @@ public class Logger
 			.Header($"[aquamarine1]{header}[/]", Justify.Center);
 
 		AnsiConsole.Write(sampleData);
-	}
-
-	public void PrintExportJobResult(string finalMessage, ExportJob exportJob)
-	{
-		int processed = exportJob.ProcessedRecords - exportJob.RecordsWithErrors - exportJob.RecordsWithWarnings ?? 0;
-
-		LogInformation(finalMessage, hideTimeStamp: true);
-		AnsiConsole.WriteLine();
-		AnsiConsole.Write(new BreakdownChart()
-			.Width(60)
-			.AddItem("Processed", processed, Color.Green)
-			.AddItem("Records with errors", exportJob.RecordsWithErrors ?? 0, Color.Red)
-			.AddItem("Records with warnings", exportJob.RecordsWithWarnings ?? 0, Color.Yellow));
-		AnsiConsole.WriteLine();
-	}
-
-	public void PrintBulkExportJobResult(string finalMessage, List<ExportStatus?> exportStatuses)
-	{
-		int successJobs = exportStatuses.Count(s => s == ExportStatus.Completed);
-		int failedJobs = exportStatuses.Count(s => s == ExportStatus.Failed);
-		int cancelledJobs = exportStatuses.Count(s => s == ExportStatus.Cancelled);
-		int completedWithErrorsJobs = exportStatuses.Count(s => s == ExportStatus.CompletedWithErrors);
-
-		LogInformation(string.IsNullOrEmpty(finalMessage) ? "Bulk export completed" : finalMessage, hideTimeStamp: true);
-		AnsiConsole.WriteLine();
-		AnsiConsole.Write(new BreakdownChart()
-			.Width(60)
-			.AddItem("Success", successJobs, Color.Green)
-			.AddItem("Completed With Errors", completedWithErrorsJobs, Color.OrangeRed1)
-			.AddItem("Failed", failedJobs, Color.Red)
-			.AddItem("Cancelled", cancelledJobs, Color.Yellow));
-		AnsiConsole.WriteLine();
 	}
 
 	private string LevelToMessage(LogLevel logLevel) => logLevel switch
