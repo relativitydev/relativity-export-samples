@@ -6,7 +6,7 @@ namespace Relativity.Export.Samples.RelConsole.SampleCollection;
 
 public partial class BaseExportService
 {
-	[SampleMetadata(4, nameof(Export_FromFolder_FullText), "Exports Fulltext from folder")]
+	[SampleMetadata(nameof(Export_FromFolder_FullText), "Exports Fulltext from folder")]
 	public async Task Export_FromFolder_FullText()
 	{
 		// Your workspace ID.

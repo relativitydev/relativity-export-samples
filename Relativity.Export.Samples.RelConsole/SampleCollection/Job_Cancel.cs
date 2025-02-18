@@ -8,7 +8,7 @@ namespace Relativity.Export.Samples.RelConsole.SampleCollection;
 
 public partial class BaseExportService
 {
-	[SampleMetadata(20, nameof(Job_Cancel), "Cancels running export job")]
+	[SampleMetadata(nameof(Job_Cancel), "Cancels running export job")]
 	public async Task Job_Cancel()
 	{
 		// Your workspace ID.

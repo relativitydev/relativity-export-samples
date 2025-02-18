@@ -6,7 +6,7 @@ namespace Relativity.Export.Samples.RelConsole.SampleCollection;
 
 public partial class BaseExportService
 {
-	[SampleMetadata(6, nameof(Export_FromSavedSearch_NativeFiles), "Exports native files from saved search")]
+	[SampleMetadata(nameof(Export_FromSavedSearch_NativeFiles), "Exports native files from saved search")]
 	public async Task Export_FromSavedSearch_NativeFiles()
 	{
 		// Your workspace ID.

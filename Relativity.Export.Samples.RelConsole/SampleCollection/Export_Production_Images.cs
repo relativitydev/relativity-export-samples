@@ -6,7 +6,7 @@ namespace Relativity.Export.Samples.RelConsole.SampleCollection;
 
 public partial class BaseExportService
 {
-	[SampleMetadata(12, nameof(Export_FromProduction_Images), "Exports images from folder")]
+	[SampleMetadata(nameof(Export_FromProduction_Images), "Exports images from folder")]
 	public async Task Export_FromProduction_Images()
 	{
 		// Your workspace ID.
