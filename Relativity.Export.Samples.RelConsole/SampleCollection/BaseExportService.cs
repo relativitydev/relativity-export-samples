@@ -16,19 +16,19 @@ public partial class BaseExportService
 
 	public BaseExportService(string host, string username, string password, string[] args = default!)
 	{
-		this._host = host;
-		this._username = username;
-		this._password = password;
+		_host = host;
+		_username = username;
+		_password = password;
 
-		this._serviceFactory = this.GetServiceFactory();
+		_serviceFactory = GetServiceFactory();
 
 		_logger = new Logger(args);
 	}
 
 	protected IServiceFactory GetServiceFactory()
 	{
-		Uri relativityRestUri = new Uri($"{this._host}relativity.rest/api");
-		Credentials credentials = new UsernamePasswordCredentials(this._username, this._password);
+		Uri relativityRestUri = new Uri($"{_host}relativity.rest/api");
+		Credentials credentials = new UsernamePasswordCredentials(_username, _password);
 
 		ServiceFactorySettings settings = new ServiceFactorySettings(relativityRestUri, credentials);
 

@@ -102,7 +102,7 @@ public partial class BaseExportService
 			.Build();
 
 		// Create proxy to use IExportJobManager
-		using Relativity.Export.V1.IExportJobManager jobManager = this._serviceFactory.CreateProxy<Relativity.Export.V1.IExportJobManager>();
+		using Relativity.Export.V1.IExportJobManager jobManager = _serviceFactory.CreateProxy<Relativity.Export.V1.IExportJobManager>();
 
 		_logger.PrintJobJson(jobSettings);
 
@@ -151,7 +151,7 @@ public partial class BaseExportService
 
 		// Get status of the job and await for the completed state
 		_logger.LogInformation("Awaiting job status updates");
-		var jobResult = await this.WaitForJobToBeCompletedAsync(async () =>
+		var jobResult = await WaitForJobToBeCompletedAsync(async () =>
 		{
 			return await jobManager.GetAsync(workspaceID, jobID);
 		});

@@ -11,6 +11,7 @@ public static class OutputHelper
 {
 	private static string[] _args = default!;
 	private static Dictionary<int, MethodInfo> _sampleRunner = new();
+	private static List<SampleMetadata> _samples = new();
 	private static StatusContext _statusContext = default!;
 	private static object _statusLock = new();
 
@@ -19,17 +20,15 @@ public static class OutputHelper
 		try
 		{
 			_args = args;
-			List<SampleMetadata> samples;
 			int selectedSampleId = -1;
 			bool isSampleValid = args.Length > 0 && Int32.TryParse(args[0], out selectedSampleId);
 
-			samples = GetSamples(isSampleValid ? selectedSampleId : -1);
+			GetSamples(isSampleValid ? selectedSampleId : -1);
 
 			if (!args.Contains("-noui"))
 			{
-
-				var samplesPanel = GetSamplesPanel(samples);
-				var metadataPanel = GetSampleMetadataPanel(samples.FirstOrDefault(s => s.ID == selectedSampleId));
+				var samplesPanel = GetSamplesPanel();
+				var metadataPanel = GetSampleMetadataPanel(_samples.FirstOrDefault(s => s.ID == selectedSampleId));
 
 				Columns[] dataColumns =
 				[
@@ -126,9 +125,9 @@ public static class OutputHelper
 		}
 	}
 
-	private static List<SampleMetadata> GetSamples(int selectedSampleId)
+	private static void GetSamples(int selectedSampleId)
 	{
-		List<SampleMetadata> samples = new();
+		_samples = new();
 		var sampleMethods = Assembly.GetExecutingAssembly()
 			 .GetTypes()
 			 .SelectMany(type => type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly))
@@ -155,11 +154,9 @@ public static class OutputHelper
 				!string.IsNullOrEmpty(data.Description) ? data.Description : "No description",
 				sampleID == selectedSampleId); // is sample currently selected
 
-			samples.Add(sampleMetadata);
-			_sampleRunner.Add(i + 1, sampleMethods[i]);
+			_samples.Add(sampleMetadata);
+			_sampleRunner.Add(sampleID, sampleMethods[i]);
 		}
-
-		return samples;
 	}
 
 	private static Panel GetSampleMetadataPanel(SampleMetadata? sample)
@@ -201,20 +198,20 @@ public static class OutputHelper
 		return metadataPanel;
 	}
 
-	private static Panel GetSamplesPanel(List<SampleMetadata> samplesMetadata)
+	private static Panel GetSamplesPanel()
 	{
 		var samplesTable = new Table()
 			.Expand();
 
 		samplesTable.AddColumns("ID", "Name");
 
-		foreach (var sample in samplesMetadata.OrderBy(s => s.ID))
+		foreach (var sample in _samples)
 		{
-			IRenderable[] rows = new IRenderable[]
-			{
+			IRenderable[] rows =
+			[
 				new Markup(sample.ID.ToString(), new Style(sample.IsSelected ? Color.Aquamarine1 : Color.Orange1)),
 				new Markup(sample.Name, new Style(sample.IsSelected ? Color.Aquamarine1 : Color.Orange1))
-			};
+			];
 
 			samplesTable.AddRow(rows);
 		}

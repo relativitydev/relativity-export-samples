@@ -23,31 +23,6 @@ public class Logger
 		_args = args;
 	}
 
-	public void PrintJobJson(ExportJobSettings settings, bool print = false)
-	{
-		if (!_args.Contains("-json"))
-		{
-			if (!print)
-				return;
-		}
-
-		// create JSON for preview
-		var serializerOptions = new JsonSerializerOptions()
-		{
-			WriteIndented = true,
-		};
-
-		var json = JsonSerializer.Serialize(settings, serializerOptions);
-
-		var panel = new Panel(new JsonText(json))
-			.RoundedBorder()
-			.BorderColor(Color.Orange1)
-			.Header("[aquamarine1]Job JSON[/]", Justify.Center);
-
-		AnsiConsole.Write(panel);
-	}
-
-
 	public void LogWarning(string message, bool hideTimeStamp = false)
 	{
 		Log(new SampleLog(LogLevel.Warning, $"[orange1]{message}[/]", hideTimeStamp));
@@ -95,7 +70,31 @@ public class Logger
 		AnsiConsole.Write(table);
 	}
 
-	public void PrintSampleData(Dictionary<string, string> data)
+	public void PrintJobJson(ExportJobSettings settings, bool print = false)
+	{
+		if (!_args.Contains("-json"))
+		{
+			if (!print)
+				return;
+		}
+
+		// create JSON for preview
+		var serializerOptions = new JsonSerializerOptions()
+		{
+			WriteIndented = true,
+		};
+
+		var json = JsonSerializer.Serialize(settings, serializerOptions);
+
+		var panel = new Panel(new JsonText(json))
+			.RoundedBorder()
+			.BorderColor(Color.Orange1)
+			.Header("[aquamarine1]Job JSON[/]", Justify.Center);
+
+		AnsiConsole.Write(panel);
+	}
+
+	public void PrintDictionaryData<K, V>(Dictionary<K, V> data, string header) where K : notnull
 	{
 		var dataGrid = new Grid()
 			.AddColumn(new GridColumn().NoWrap())
@@ -103,51 +102,19 @@ public class Logger
 
 		foreach (var record in data)
 		{
-			dataGrid.AddRow(new Markup[]
-			{
+			dataGrid.AddRow(
+			[
 				new Markup($"[orange1]{record.Key}[/]"),
-				new Markup(record.Value)
-			});
+				new Markup(record.Value?.ToString() ?? "#null")
+			]);
 		}
 
 		var sampleData = new Panel(dataGrid)
 			.RoundedBorder()
 			.BorderColor(Color.Orange1)
-			.Header("[aquamarine1]Sample Data[/]", Justify.Center);
+			.Header($"[aquamarine1]{header}[/]", Justify.Center);
 
 		AnsiConsole.Write(sampleData);
-	}
-
-	public void PrintExportJobResult(string finalMessage, ExportJob exportJob)
-	{
-		int processed = exportJob.ProcessedRecords - exportJob.RecordsWithErrors - exportJob.RecordsWithWarnings ?? 0;
-
-		LogInformation(finalMessage, hideTimeStamp: true);
-		AnsiConsole.WriteLine();
-		AnsiConsole.Write(new BreakdownChart()
-			.Width(60)
-			.AddItem("Processed", processed, Color.Green)
-			.AddItem("Records with errors", exportJob.RecordsWithErrors ?? 0, Color.Red)
-			.AddItem("Records with warnings", exportJob.RecordsWithWarnings ?? 0, Color.Yellow));
-		AnsiConsole.WriteLine();
-	}
-
-	public void PrintBulkExportJobResult(string finalMessage, List<ExportStatus?> exportStatuses)
-	{
-		int successJobs = exportStatuses.Count(s => s == ExportStatus.Completed);
-		int failedJobs = exportStatuses.Count(s => s == ExportStatus.Failed);
-		int cancelledJobs = exportStatuses.Count(s => s == ExportStatus.Cancelled);
-		int completedWithErrorsJobs = exportStatuses.Count(s => s == ExportStatus.CompletedWithErrors);
-
-		LogInformation(string.IsNullOrEmpty(finalMessage) ? "Bulk export completed" : finalMessage, hideTimeStamp: true);
-		AnsiConsole.WriteLine();
-		AnsiConsole.Write(new BreakdownChart()
-			.Width(60)
-			.AddItem("Success", successJobs, Color.Green)
-			.AddItem("Completed With Errors", completedWithErrorsJobs, Color.OrangeRed1)
-			.AddItem("Failed", failedJobs, Color.Red)
-			.AddItem("Cancelled", cancelledJobs, Color.Yellow));
-		AnsiConsole.WriteLine();
 	}
 
 	private string LevelToMessage(LogLevel logLevel) => logLevel switch
