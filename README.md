@@ -1,7 +1,3 @@
-<p align="center">
-    <img align="center" src="./Relativity.Export.Samples.RelConsole//Helpers/logo.png" />
-<p>
-
 # Relativity Export SDK
 
 ## Table of contents
