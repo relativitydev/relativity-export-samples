@@ -18,7 +18,7 @@ public partial class BaseExportService
 		int viewID = 1042326;
 
 		// Your Folder ID.
-		// Our targetted folder. If you want to export from the workspace root, 
+		// Our targeted folder. If you want to export from the workspace root, 
 		// the ID is different from the workspace ID.
 		int folderID = 1003697;
 
@@ -145,10 +145,10 @@ public partial class BaseExportService
 		_logger.LogInformation("Job created successfully");
 
 		// Start export job
-		_logger.LogInformation($"Stating job with <{jobID}> ID");
+		_logger.LogInformation($"Starting job with <{jobID}> ID");
 		var startResponse = await jobManager.StartAsync(workspaceID, jobID);
 
-		// Check for errors that occured during job start
+		// Check for errors that occurred during job start
 		if (!string.IsNullOrEmpty(startResponse.ErrorMessage))
 		{
 			_logger.LogError($"<{startResponse.ErrorCode}> {startResponse.ErrorMessage}");

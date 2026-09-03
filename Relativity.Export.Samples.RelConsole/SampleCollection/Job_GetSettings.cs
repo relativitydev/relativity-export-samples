@@ -38,7 +38,7 @@ public partial class BaseExportService
 		int viewID = 1042326;
 
 		// Your Folder ID.
-		// Our targetted folder. If you want to export from the workspace root, 
+		// Our targeted folder. If you want to export from the workspace root, 
 		// the ID is different from the workspace ID.
 		int folderID = 1003697;
 

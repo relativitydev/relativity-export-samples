@@ -609,7 +609,7 @@ var validationResult = await jobManager.CreateAsync(
 // Start export job
 var startResponse = await jobManager.StartAsync(workspaceID, jobID);
 
-// Check for errors that occured during job start
+// Check for errors that occurred during job start
 if (!string.IsNullOrEmpty(startResponse.ErrorMessage))
 {
     _logger.LogError($"<{startResponse.ErrorCode}> {startResponse.ErrorMessage}");
@@ -828,7 +828,7 @@ To run a sample code:
 
       # Export settings parameters
       # Your view ID: view will provide us with available data to export, requires folder to be visible there.
-      # Your folder ID: our targetted folder. If you want to export from the workspace root, the ID is different from the workspace ID.
+      # Your folder ID: our targeted folder. If you want to export from the workspace root, the ID is different from the workspace ID.
       # ExportSourceType: ExportFolder or ExportFolderWithSubfolders
       [int]$viewId = 1003684
       [int]$folderID = 1003697
