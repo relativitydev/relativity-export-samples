@@ -119,10 +119,10 @@ public partial class BaseExportService
 		_logger.LogInformation("Job created successfully");
 
 		// Start export job
-		_logger.LogInformation($"Stating job with <{jobID}> ID");
+		_logger.LogInformation($"Starting job with <{jobID}> ID");
 		var startResponse = await jobManager.StartAsync(workspaceID, jobID);
 
-		// Check for errors that occured during job start
+		// Check for errors that occurred during job start
 		if (!string.IsNullOrEmpty(startResponse.ErrorMessage))
 		{
 			_logger.LogError($"<{startResponse.ErrorCode}> {startResponse.ErrorMessage}");

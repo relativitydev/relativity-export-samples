@@ -7,7 +7,7 @@
 
 # Export settings parameters
 # Your view ID: view will provide us with available data to export, requires folder to be visible there.
-# Your folder ID: our targetted folder. If you want to export from the workspace root, the ID is different from the workspace ID.
+# Your folder ID: our targeted folder. If you want to export from the workspace root, the ID is different from the workspace ID.
 # ExportSourceType: ExportFolder or ExportFolderWithSubfolders
 [int]$viewId = 1003684
 [int]$folderID = 1003697
